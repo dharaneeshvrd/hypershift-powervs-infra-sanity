@@ -6,8 +6,8 @@ import (
 	"os"
 	"sync"
 
-	ibmcloud_powervs "github.com/dharaneeshvrd/hypershift/cmd/infra/ibmcloud_powervs"
-	"github.com/dharaneeshvrd/hypershift/cmd/log"
+	"github.com/openshift/hypershift/cmd/infra/powervs"
+	"github.com/openshift/hypershift/cmd/log"
 )
 
 /*
@@ -43,37 +43,23 @@ var powerVsRegionL = []string{"osa", "us-south", "dal", "eu-de", "tor", "sao", "
 var vpcRegionL = []string{"jp-osa", "us-south", "us-south", "eu-de", "ca-tor", "br-sao", "eu-gb", "au-syd", "jp-tok", "us-east", "us-east"}
 
 const (
-	infraNamePrefix = "hypershift-sanity"
+	infraNamePrefix = "hyp-sanity"
 )
 
 var m sync.Mutex
 
 type sanityResult struct {
-	infra   ibmcloud_powervs.Infra
-	options ibmcloud_powervs.CreateInfraOptions
+	infra   powervs.Infra
+	options powervs.CreateInfraOptions
 }
 
 type sanityResultL []sanityResult
 
 var sanityResults = make(sanityResultL, 0)
 
-func getEmptyStat() ibmcloud_powervs.CreateStat {
-	return ibmcloud_powervs.CreateStat{
-		Status:   "n/a",
-		Duration: "n/a",
-	}
-}
-
-func runSanity(options ibmcloud_powervs.CreateInfraOptions, wg *sync.WaitGroup) {
+func runSanity(options powervs.CreateInfraOptions, wg *sync.WaitGroup) {
 	log.Log.WithName(options.InfraID).Info("runSanity called with", "options", options)
-	infra := &ibmcloud_powervs.Infra{ID: options.InfraID,
-		Stats: ibmcloud_powervs.InfraCreationStat{
-			Vpc:            getEmptyStat(),
-			VpcSubnet:      getEmptyStat(),
-			CloudInstance:  getEmptyStat(),
-			DhcpService:    getEmptyStat(),
-			CloudConnState: getEmptyStat(),
-		}}
+	infra := &powervs.Infra{ID: options.InfraID}
 
 	err := infra.SetupInfra(&options)
 
@@ -88,15 +74,15 @@ func runSanity(options ibmcloud_powervs.CreateInfraOptions, wg *sync.WaitGroup) 
 	wg.Done()
 }
 
-func cleanInfra(options ibmcloud_powervs.CreateInfraOptions, wg *sync.WaitGroup) {
+func cleanInfra(options powervs.CreateInfraOptions, wg *sync.WaitGroup) {
 	log.Log.WithName(options.InfraID).Info("cleanInfra called with", "options", options)
-	destroyOptions := ibmcloud_powervs.DestroyInfraOptions{InfraID: options.InfraID,
+	destroyOptions := powervs.DestroyInfraOptions{InfraID: options.InfraID,
 		ResourceGroup: "hypershift-resource-group",
 		PowerVSRegion: options.PowerVSRegion,
 		PowerVSZone:   options.PowerVSZone,
 		VpcRegion:     options.VpcRegion,
 	}
-	infra := &ibmcloud_powervs.Infra{}
+	infra := &powervs.Infra{}
 	err := destroyOptions.DestroyInfra(infra)
 	if err != nil {
 		log.Log.WithName(options.InfraID).Info("error cleaing up", "infra", options.InfraID, "err", err)
@@ -122,7 +108,7 @@ func main() {
 		for _, zone := range powerVsRegionZoneM[region] {
 
 			vpcRegion := vpcRegionL[index]
-			options := ibmcloud_powervs.CreateInfraOptions{BaseDomain: baseDomain,
+			options := powervs.CreateInfraOptions{BaseDomain: baseDomain,
 				Debug:         true,
 				ResourceGroup: resourceGroup,
 				PowerVSRegion: region,
