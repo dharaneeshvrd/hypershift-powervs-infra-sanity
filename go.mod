@@ -1,10 +1,10 @@
 module github.com/dharaneeshvrd/infra_sanity
 
-require github.com/openshift/hypershift v0.0.0-20220601202338-62ba0c91b11d
+require github.com/openshift/hypershift v0.0.0-20220603172658-97307145cb7d
 
 require (
 	github.com/IBM-Cloud/power-go-client v1.1.4 // indirect
-	github.com/IBM/go-sdk-core/v5 v5.9.2 // indirect
+	github.com/IBM/go-sdk-core/v5 v5.9.5 // indirect
 	github.com/IBM/networking-go-sdk v0.29.0 // indirect
 	github.com/IBM/platform-services-go-sdk v0.22.8 // indirect
 	github.com/IBM/vpc-go-sdk v1.0.1 // indirect
