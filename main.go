@@ -77,7 +77,7 @@ func runSanity(options powervs.CreateInfraOptions, wg *sync.WaitGroup) {
 func cleanInfra(options powervs.CreateInfraOptions, wg *sync.WaitGroup) {
 	log.Log.WithName(options.InfraID).Info("cleanInfra called with", "options", options)
 	destroyOptions := powervs.DestroyInfraOptions{InfraID: options.InfraID,
-		ResourceGroup: "hypershift-resource-group",
+		ResourceGroup: options.ResourceGroup,
 		PowerVSRegion: options.PowerVSRegion,
 		PowerVSZone:   options.PowerVSZone,
 		VpcRegion:     options.VpcRegion,
@@ -139,7 +139,7 @@ func main() {
 	var jsonOut = make(map[string]interface{})
 
 	for _, result := range sanityResults {
-		out := map[string]interface{}{"infra": result.infra, "stats": result.infra.Stats}
+		out := map[string]interface{}{"infra": result.infra}
 		jsonOut[result.options.InfraID] = out
 	}
 
