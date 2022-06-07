@@ -26,21 +26,18 @@ var powerVsRegionZoneM = map[string][]string{
 }*/
 
 var powerVsRegionZoneM = map[string][]string{
-	"osa":      {"osa21"},
-	"us-south": {"us-south"},
-	"dal":      {"dal12"},
-	"eu-de":    {"eu-de-2"},
-	"tor":      {"tor01"},
-	"sao":      {"sao01"},
-	"lon":      {"lon04"},
-	"syd":      {"syd04"},
-	"us-east":  {"us-east"},
-	"wdc":      {"wdc06"},
+	"osa":   {"osa21"},
+	"eu-de": {"eu-de-2"},
+	"tor":   {"tor01"},
+	"sao":   {"sao01"},
+	"lon":   {"lon04"},
+	"syd":   {"syd04"},
+	"tok":   {"tok04"},
 }
 
-var powerVsRegionL = []string{"osa", "us-south", "dal", "eu-de", "tor", "sao", "lon", "syd", "tok", "us-east", "wdc"}
+var powerVsRegionL = []string{"osa", "eu-de", "tor", "sao", "lon", "syd", "tok"}
 
-var vpcRegionL = []string{"jp-osa", "us-south", "us-south", "eu-de", "ca-tor", "br-sao", "eu-gb", "au-syd", "jp-tok", "us-east", "us-east"}
+var vpcRegionL = []string{"jp-osa", "eu-de", "ca-tor", "br-sao", "eu-gb", "au-syd", "jp-tok"}
 
 const (
 	infraNamePrefix = "hyp-sanity"
